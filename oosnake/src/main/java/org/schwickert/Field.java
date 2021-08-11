@@ -1,21 +1,41 @@
 package org.schwickert;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class Field {
     
-    ArrayList<Cell> cells = new ArrayList<>();
+    private Map<Cell, CellStatus> cells = new HashMap<>();
 
 
-    public Field(int x, int y) {
+    public Field(int x, int y, Snake snake) {
         for (int i = 0; i < y; i++) {
             for (int j = 0; j < x; j++) {
 
-                cells.add(new Cell(j, i, CellStatus.EMPTY));
+                if(i == (int) y / 2 && j == (int) x / 2){
+                    cells.put(new Cell(j, i), CellStatus.SNAKE);
+                }else{
+                    cells.put(new Cell(j, i), CellStatus.EMPTY);
+                }
             }
         }
+        generateFruit();
     }
     
+    public void generateFruit(){
+        Random random = new Random();
+        int randomPos;
+
+        do {
+            randomPos = random.nextInt(cells.size());
+        } while (cells.get(randomPos) == CellStatus.SNAKE); // stimmt nicht
+        
+        cells.get(randomPos) =  CellStatus.FRUIT;
+        cells.put(key, value)
+    }
+
     @Override
     public String toString() {
         String res = "";
@@ -25,7 +45,13 @@ public class Field {
                     yBefore++;
                     res += "| \n";
                 }
-                res += cell;
+                if (status == CellStatus.EMPTY) {
+                    res += "| ";
+                }else if (status == CellStatus.FRUIT) {
+                    res += "|X";            
+                }else{
+                    res += "|O";
+                }
             }
         return res + "|";
     }
