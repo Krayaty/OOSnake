@@ -41,6 +41,13 @@ public class Cell{
 
     @Override
     public String toString(){
-        return "x=" + x + " y=" + y + " " + status;
+        
+        if (status == CellStatus.EMPTY) {
+            return "| ";
+        }else if (status == CellStatus.FRUIT) {
+            return "|X";            
+        }else{
+            return "|O";
+        }
     }
 }
