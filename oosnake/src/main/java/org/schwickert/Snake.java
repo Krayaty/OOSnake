@@ -15,8 +15,15 @@ public class Snake {
         return cells.get(0);
     }
 
+    public boolean isHead(Cell c) {
+        return c.equals(this.getHead());
+    }
 
     public ArrayList<Cell> getCells() {
         return this.cells;
+    }
+
+    public void moveRight(){
+        
     }
 }

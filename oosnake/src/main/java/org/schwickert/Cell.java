@@ -1,5 +1,8 @@
 package org.schwickert;
 
+import java.util.Comparator;
+import java.util.Objects;
+
 public class Cell{
 
     private int x;
@@ -26,6 +29,23 @@ public class Cell{
 
     public void setY(int y) {
         this.y = y;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Cell)) {
+            return false;
+        }
+        Cell cell = (Cell) o;
+        return x == cell.x && y == cell.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 
     @Override
