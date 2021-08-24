@@ -21,7 +21,7 @@ public class SnakeGame extends JFrame implements KeyListener{
 
     public static void main(String[] args) {
 
-        SnakeGame game = new SnakeGame(5, 5);
+        SnakeGame game = new SnakeGame(15, 15);
 
     }
 
@@ -37,7 +37,7 @@ public class SnakeGame extends JFrame implements KeyListener{
         this.setFocusable(true);
         this.addKeyListener(this);
         this.setTitle("Snake");
-        this.setSize(COLOUMNS * 100, ROWS * 100);
+        this.setSize(COLOUMNS * 50, ROWS * 50);
         this.setResizable(false);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
