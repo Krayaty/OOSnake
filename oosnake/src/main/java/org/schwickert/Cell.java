@@ -3,34 +3,31 @@ package org.schwickert;
 import java.util.Comparator;
 import java.util.Objects;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@AllArgsConstructor
 public class Cell{
 
-    private int x;
-    private int y;
+    public int x;
+    public int y;
 
-    public Cell(int x, int y){
-        this.x = x;
-        this.y = y;
+    public Cell getRightNeighbour(){
+        return new Cell(this.x + 1, this.y);
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public Cell getLeftNeighbour(){
+        return new Cell(this.x - 1, this.y);
     }
 
-
-    public int getX() {
-        return this.x;
+    public Cell getTopNeighbour(){
+        return new Cell(this.x, this.y - 1);
     }
 
-
-    public int getY() {
-        return this.y;
+    public Cell getBottomNeighbour(){
+        return new Cell(this.x, this.y + 1);
     }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
 
     @Override
     public boolean equals(Object o) {

@@ -6,10 +6,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import java.awt.GridLayout;
 
-public class SnakeGame extends JFrame {
+public class SnakeGame extends JFrame implements KeyListener{
 
     private final int CELL_SIZE = 10;
     private final int COLOUMNS;
@@ -31,6 +33,9 @@ public class SnakeGame extends JFrame {
         field = new Field(COLOUMNS, ROWS, snake);
 
         this.drawField();
+        
+        this.setFocusable(true);
+        this.addKeyListener(this);
         this.setTitle("Snake");
         this.setSize(COLOUMNS * 100, ROWS * 100);
         this.setResizable(false);
@@ -57,5 +62,32 @@ public class SnakeGame extends JFrame {
 
         this.setContentPane(content);
         this.getContentPane().setVisible(true);
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+        if (e.getKeyChar() == 'd') {
+            //TODO move methoden ausführen 
+        } else if (e.getKeyChar() == 'a') {
+            System.out.println("a");
+        } else if (e.getKeyChar() == 'w' ) {
+            System.out.println("w");
+        } else if (e.getKeyChar() == 's' ) {
+            System.out.println("s");
+        }
+        
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+       
+        
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // TODO Auto-generated method stub
+        
     }
 }

@@ -31,9 +31,12 @@ public class Field {
     }
 
     public void generateSnake() {
-        snake.getCells().forEach(c -> {
-            cells.put(c, CellStatus.SNAKE);
-        });
+        cells.put(snake.getHead(), CellStatus.SNAKE_HEAD);
+        if (snake.getBody() != null) {
+            snake.getBody().forEach(c -> {
+                cells.put(c, CellStatus.SNAKE_BODY);
+            });
+        } 
     }
 
     public void generateFruit() {
@@ -46,9 +49,13 @@ public class Field {
             randomX = random.nextInt(XMAX);
             randomY = random.nextInt(YMAX);
             randomPos = new Cell(randomX, randomY);
-        } while (cells.get(randomPos) == CellStatus.SNAKE);
+        } while (isSnakeCell(randomPos));
 
         cells.put(randomPos, CellStatus.FRUIT);
+    }
+
+    public boolean isSnakeCell(Cell cell){
+        return cells.get(cell) == CellStatus.SNAKE_BODY && cells.get(cell) == CellStatus.SNAKE_HEAD;
     }
 
     public void run() {
@@ -78,6 +85,48 @@ public class Field {
         return this.getCellStatus(cell).color;
     }
 
+    public boolean isOutOfBounds(Cell nextCell){
+
+        if (nextCell.x > XMAX || nextCell.x < 0 || nextCell.y > YMAX || nextCell.y < YMAX) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isInBounds(Cell nextCell){
+        return !isOutOfBounds(nextCell);
+    }
+
+    public void moveSnakeRight(){
+        if (isInBounds(snake.getHead().getRightNeighbour())) {
+            snake.moveRight();
+            //TODO draw methode schreiben in field
+            return;
+        }
+        //TODO end methode schreiben in field 
+    }
+
+    public void moveSnakeLeft(){
+        if (isInBounds(snake.getHead().getRightNeighbour())) {
+            snake.moveLeft();
+        }
+        
+    }
+
+    public void moveSnakeUp(){
+        if (isInBounds(snake.getHead().getRightNeighbour())) {
+            snake.moveUp();
+        }
+        
+    }
+
+    public void moveSnakeDown(){
+        if (isInBounds(snake.getHead().getRightNeighbour())) {
+            snake.moveDown();
+        }
+        
+    }
+
     @Override
     public String toString() {
         String res = "";
@@ -87,7 +136,7 @@ public class Field {
         List<Cell> sortedCells = Arrays.asList(cellArray);
         sortedCells.sort(new CellComparator());
         for (Cell cell : sortedCells) {
-            if (cell.getY() > yBefore) {
+            if (cell.y > yBefore) {
                 yBefore++;
                 res += "| \n";
             }

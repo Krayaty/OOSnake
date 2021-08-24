@@ -7,12 +7,12 @@ public class CellComparator implements Comparator<Cell>{
     @Override
     public int compare(Cell o1, Cell o2) {
         
-        if(o1.getY() < o2.getY()){
+        if(o1.y < o2.y){
             return -1;
-        }else if(o1.getY() == o2.getY()){
-            if(o1.getX() < o2.getX()){
+        }else if(o1.y == o2.y){
+            if(o1.x < o2.x){
                 return -1;
-            }else if(o1.getX() == o2.getX()){
+            }else if(o1.x == o2.x){
                 return 0;
             }
         }

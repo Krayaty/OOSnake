@@ -6,7 +6,6 @@ public class Snake {
     
     private ArrayList<Cell> cells = new ArrayList<>();
 
-
     public Snake(int x, int y) {
         cells.add(new Cell(x, y));
     }
@@ -23,7 +22,30 @@ public class Snake {
         return this.cells;
     }
 
-    public void moveRight(){
+    public ArrayList<Cell> getBody() {
+        ArrayList<Cell> body = (ArrayList<Cell>) cells.clone();
         
+        body.remove(0);
+        return body;
+    }
+
+    public void moveRight(){
+        cells.add(0, this.getHead().getRightNeighbour());
+        cells.remove(cells.size() - 1);
+    }
+
+    public void moveLeft(){
+        cells.add(0, this.getHead().getLeftNeighbour());
+        cells.remove(cells.size() - 1);
+    }
+
+    public void moveUp(){
+        cells.add(0, this.getHead().getTopNeighbour());
+        cells.remove(cells.size() - 1);
+    }
+
+    public void moveDown(){
+        cells.add(0, this.getHead().getBottomNeighbour());
+        cells.remove(cells.size() - 1);
     }
 }
