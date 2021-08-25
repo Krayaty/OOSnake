@@ -14,32 +14,30 @@ public class Field {
     private final int YMAX;
     private Snake snake;
     private boolean done = false;
+    private Cell fruit;
 
     public Field(int x, int y, Snake snake) {
 
         XMAX = x;
         YMAX = y;
         this.snake = snake;
-        for (int i = 0; i < y; i++) {
-            for (int j = 0; j < x; j++) {
+        drawSnake();
+        generateFruit();
+        this.draw();
+    }
+
+    public void draw(){
+        for (int i = 0; i < YMAX; i++) {
+            for (int j = 0; j < XMAX; j++) {
                 cells.put(new Cell(j, i), CellStatus.EMPTY);
 
             }
         }
-        generateSnake();
-        generateFruit();
+        drawSnake();
+        drawFruit();
     }
 
-    public void generateSnake() {
-        cells.put(snake.getHead(), CellStatus.SNAKE_HEAD);
-        if (snake.getBody() != null) {
-            snake.getBody().forEach(c -> {
-                cells.put(c, CellStatus.SNAKE_BODY);
-            });
-        } 
-    }
-
-    public void generateFruit() {
+    public void generateFruit(){
         Random random = new Random();
         int randomX;
         int randomY;
@@ -50,23 +48,24 @@ public class Field {
             randomY = random.nextInt(YMAX);
             randomPos = new Cell(randomX, randomY);
         } while (isSnakeCell(randomPos));
-
-        cells.put(randomPos, CellStatus.FRUIT);
+        
+        fruit = randomPos; 
     }
 
+    public void drawFruit() {
+        cells.put(fruit, CellStatus.FRUIT);
+    }
+   
+    public void drawSnake() {
+        cells.put(snake.getHead(), CellStatus.SNAKE_HEAD);
+        if (snake.getBody() != null) {
+            for (Cell cell : snake.getBody()) {
+                cells.put(cell, CellStatus.SNAKE_BODY);
+            } 
+        } 
+    }
     public boolean isSnakeCell(Cell cell){
         return cells.get(cell) == CellStatus.SNAKE_BODY && cells.get(cell) == CellStatus.SNAKE_HEAD;
-    }
-
-    public void run() {
-        int i = 0;
-        while (!done) {
-            if (i == 20000) {
-                done = true;
-            }
-            i++;
-            System.out.println(this);
-        }
     }
 
     public List<Cell> getSortedCellList() {
@@ -87,7 +86,7 @@ public class Field {
 
     public boolean isOutOfBounds(Cell nextCell){
 
-        if (nextCell.x > XMAX || nextCell.x < 0 || nextCell.y > YMAX || nextCell.y < YMAX) {
+        if (nextCell.x > XMAX - 1 || nextCell.x < 0 || nextCell.y > YMAX - 1 || nextCell.y < 0) {
             return true;
         }
         return false;
@@ -97,34 +96,40 @@ public class Field {
         return !isOutOfBounds(nextCell);
     }
 
-    public void moveSnakeRight(){
+    public SnakeStatus moveSnakeRight(){
         if (isInBounds(snake.getHead().getRightNeighbour())) {
             snake.moveRight();
-            //TODO draw methode schreiben in field
-            return;
-        }
-        //TODO end methode schreiben in field 
+            this.draw();
+            return SnakeStatus.ALIVE;
+        } 
+        return SnakeStatus.DEAD;
     }
 
-    public void moveSnakeLeft(){
-        if (isInBounds(snake.getHead().getRightNeighbour())) {
+    public SnakeStatus moveSnakeLeft(){
+        if (isInBounds(snake.getHead().getLeftNeighbour())) {
             snake.moveLeft();
-        }
-        
+            this.draw();
+            return SnakeStatus.ALIVE;
+        } 
+        return SnakeStatus.DEAD;
     }
 
-    public void moveSnakeUp(){
-        if (isInBounds(snake.getHead().getRightNeighbour())) {
+    public SnakeStatus moveSnakeUp(){
+        if (isInBounds(snake.getHead().getTopNeighbour())) {
             snake.moveUp();
-        }
-        
+            this.draw();
+            return SnakeStatus.ALIVE;
+        } 
+        return SnakeStatus.DEAD;
     }
 
-    public void moveSnakeDown(){
-        if (isInBounds(snake.getHead().getRightNeighbour())) {
+    public SnakeStatus moveSnakeDown(){
+        if (isInBounds(snake.getHead().getBottomNeighbour())) {
             snake.moveDown();
-        }
-        
+            this.draw();
+            return SnakeStatus.ALIVE;
+        } 
+        return SnakeStatus.DEAD;
     }
 
     @Override

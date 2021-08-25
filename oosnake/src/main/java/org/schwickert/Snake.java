@@ -3,7 +3,7 @@ package org.schwickert;
 import java.util.ArrayList;
 
 public class Snake {
-    
+
     private ArrayList<Cell> cells = new ArrayList<>();
 
     public Snake(int x, int y) {
@@ -47,5 +47,14 @@ public class Snake {
     public void moveDown(){
         cells.add(0, this.getHead().getBottomNeighbour());
         cells.remove(cells.size() - 1);
+    }
+
+    @Override
+    public String toString(){
+        String res = "";
+        for (Cell cell : cells) {
+            res += cell.toString();
+        }
+        return res;
     }
 }

@@ -1,11 +1,14 @@
 package org.schwickert;
 
 import java.awt.Color;
+import java.awt.Component;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -32,7 +35,7 @@ public class SnakeGame extends JFrame implements KeyListener{
         snake = new Snake(COLOUMNS / 2, ROWS / 2);
         field = new Field(COLOUMNS, ROWS, snake);
 
-        this.drawField();
+        this.initField();
         
         this.setFocusable(true);
         this.addKeyListener(this);
@@ -45,7 +48,7 @@ public class SnakeGame extends JFrame implements KeyListener{
         System.out.println(field);
     }
 
-    public void drawField() {
+    public void initField() {
         JPanel content = new JPanel(new GridLayout(ROWS, COLOUMNS));
 
         for (Cell cell : field.getSortedCellList()) {
@@ -59,22 +62,37 @@ public class SnakeGame extends JFrame implements KeyListener{
             content.add(label);
 
         }
-
         this.setContentPane(content);
-        this.getContentPane().setVisible(true);
+    }
+
+    public void updateField(){
+        Component[] labels= this.getContentPane().getComponents();
+
+        for (int i = 0; i < labels.length; i++) {
+            labels[i].setBackground(field.getColorOfCell(field.getSortedCellList().get(i)));
+        }
+        SwingUtilities.updateComponentTreeUI(this);
+        this.invalidate();
+        this.validate();
+        this.repaint();
+        System.out.println(field);
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
 
         if (e.getKeyChar() == 'd') {
-            //TODO move methoden ausführen 
+            field.moveSnakeRight();
+            this.updateField();
         } else if (e.getKeyChar() == 'a') {
-            System.out.println("a");
+            field.moveSnakeLeft();
+            this.updateField();
         } else if (e.getKeyChar() == 'w' ) {
-            System.out.println("w");
+            field.moveSnakeUp();
+            this.updateField();
         } else if (e.getKeyChar() == 's' ) {
-            System.out.println("s");
+            field.moveSnakeDown();
+            this.updateField();
         }
         
     }
