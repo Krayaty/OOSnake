@@ -1,5 +1,6 @@
 package org.schwickert;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +38,10 @@ public class Field {
         drawFruit();
     }
 
+    public Cell getFruit(){
+        return this.fruit;
+    }
+     
     public void generateFruit(){
         Random random = new Random();
         int randomX;
@@ -55,7 +60,11 @@ public class Field {
     public void drawFruit() {
         cells.put(fruit, CellStatus.FRUIT);
     }
-   
+    
+    public Cell getSnakeHead(){
+        return snake.getHead();
+    }
+
     public void drawSnake() {
         cells.put(snake.getHead(), CellStatus.SNAKE_HEAD);
         if (snake.getBody() != null) {
@@ -65,7 +74,7 @@ public class Field {
         } 
     }
     public boolean isSnakeCell(Cell cell){
-        return cells.get(cell) == CellStatus.SNAKE_BODY && cells.get(cell) == CellStatus.SNAKE_HEAD;
+        return cells.get(cell) == CellStatus.SNAKE_BODY || cells.get(cell) == CellStatus.SNAKE_HEAD;
     }
 
     public List<Cell> getSortedCellList() {
@@ -92,44 +101,65 @@ public class Field {
         return false;
     }
 
-    public boolean isInBounds(Cell nextCell){
-        return !isOutOfBounds(nextCell);
+    public boolean isSnakeHeadOnBody(Cell nextSnakeHead){
+        if (snake.getBody().isEmpty()) {
+            return false;
+        }
+        ArrayList<Cell> nextSnakeBody = snake.getBody();
+        nextSnakeBody.remove(nextSnakeBody.size() - 1);
+        return nextSnakeBody.contains(nextSnakeHead);
     }
 
-    public SnakeStatus moveSnakeRight(){
-        if (isInBounds(snake.getHead().getRightNeighbour())) {
+    public boolean isLegalTarget(Cell nextCell){
+        return !isIllegalTarget(nextCell);
+    }
+
+    public boolean isIllegalTarget(Cell nextCell){
+        return isOutOfBounds(nextCell) || isSnakeHeadOnBody(nextCell);
+    }
+
+    public void moveSnakeRight(){
+        if (isLegalTarget(snake.getHead().getRightNeighbour())) {
             snake.moveRight();
             this.draw();
-            return SnakeStatus.ALIVE;
-        } 
-        return SnakeStatus.DEAD;
+            snake.setStatus(SnakeStatus.ALIVE);
+        }else {
+            snake.setStatus(SnakeStatus.DEAD);
+        }
     }
 
-    public SnakeStatus moveSnakeLeft(){
-        if (isInBounds(snake.getHead().getLeftNeighbour())) {
+    public void moveSnakeLeft(){
+        if (isLegalTarget(snake.getHead().getLeftNeighbour())) {
             snake.moveLeft();
             this.draw();
-            return SnakeStatus.ALIVE;
-        } 
-        return SnakeStatus.DEAD;
+            snake.setStatus(SnakeStatus.ALIVE);
+        } else {
+            snake.setStatus(SnakeStatus.DEAD);
+        }
     }
 
-    public SnakeStatus moveSnakeUp(){
-        if (isInBounds(snake.getHead().getTopNeighbour())) {
+    public void moveSnakeUp(){
+        if (isLegalTarget(snake.getHead().getTopNeighbour())) {
             snake.moveUp();
             this.draw();
-            return SnakeStatus.ALIVE;
-        } 
-        return SnakeStatus.DEAD;
+            snake.setStatus(SnakeStatus.ALIVE);
+        } else {
+            snake.setStatus(SnakeStatus.DEAD);
+        }
     }
 
-    public SnakeStatus moveSnakeDown(){
-        if (isInBounds(snake.getHead().getBottomNeighbour())) {
+    public void moveSnakeDown(){
+        if (isLegalTarget(snake.getHead().getBottomNeighbour())) {
             snake.moveDown();
             this.draw();
-            return SnakeStatus.ALIVE;
-        } 
-        return SnakeStatus.DEAD;
+            snake.setStatus(SnakeStatus.ALIVE);
+        } else {
+            snake.setStatus(SnakeStatus.DEAD);
+        }
+    }
+
+    public boolean snakeOnFruit(){
+        return snake.getHead().equals(fruit);
     }
 
     @Override

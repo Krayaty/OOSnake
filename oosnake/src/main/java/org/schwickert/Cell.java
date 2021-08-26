@@ -1,11 +1,8 @@
 package org.schwickert;
 
-import java.util.Comparator;
 import java.util.Objects;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 
 @AllArgsConstructor
 public class Cell{
